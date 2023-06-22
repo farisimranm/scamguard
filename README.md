@@ -41,10 +41,10 @@ The chatbot provides a user-friendly interface for interacting with the fraud de
 `cd backend/scamguard`
 
 2. Activate the virtual environment (recommended):
-`\Scripts\activate`
+`scamguard-venv/Scripts/activate`
 
 3. Install the required Python packages:
 `pip install -r requirements.txt`
 
 4. Run api.py:
-`python api.py`
+`python src/api.py`
