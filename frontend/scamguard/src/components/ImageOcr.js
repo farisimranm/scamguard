@@ -32,7 +32,6 @@ function ImageOcr() {
   const handleSubmit = (e) => {
     e.preventDefault();
     ocr();
-    // automateChat(ocrData.text);
   }
 
   return (
@@ -70,12 +69,12 @@ function ImageOcr() {
             </div>
             }
             {
-            ocrData ? (
-                <div>
-                <div>Detected Text</div>
-                <div>{ocrData.text}</div>
-                </div>
-            ) : ''
+              ocrData ? (
+                  <div>
+                  <div>Detected Text</div>
+                  <div>{ocrData.text}</div>
+                  </div>
+              ) : ''
             }
         </div>
     </div>

@@ -4,17 +4,16 @@ import axios from 'axios';
 function AudioStt() {
     const [ audioFile, setAudioFile ] = useState(null);
     const [ audioUrl, setAudioUrl ] = useState('');
-    // const [ sttData, setSttData ] = useState();
+    const [ sttData, setSttData ] = useState();
 
     const speechToText = async () => {
         const formData = new FormData();
         formData.append('file', audioFile);
 
-        console.log(audioFile);
-
         axios.post('http://localhost:5000/api/speech-to-text', formData)
         .then((response) => {
             console.log(response.data);
+            setSttData(response.data);
         })
         .catch((error) => {
             console.error(error);
@@ -44,7 +43,7 @@ function AudioStt() {
                 </div>
             </form>
             <div>
-                {
+            {
                 <div>
                     <div>
                     {
@@ -56,9 +55,17 @@ function AudioStt() {
                             </audio>
                         </div>
                     }
+                    {
+                        sttData ? (
+                            <div>
+                            <div>Detected Text</div>
+                            <div>{sttData.text}</div>
+                            </div>
+                        ) : ''
+                    }
                     </div>
                 </div>
-                }
+            }
             </div>
         </div>
       )
