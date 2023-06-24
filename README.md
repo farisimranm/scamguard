@@ -41,11 +41,11 @@ The chatbot provides a user-friendly interface for interacting with the fraud de
 1. Navigate to the root folder of the app:
 `cd backend/scamguard`
 
-2. Create a virtual python environment (recommended):
-`python -m venv scamguard-venv`
-
 3. Activate the virtual environment (recommended):
 `scamguard-venv/Scripts/activate`
+
+2. Sometimes, the virtual environment can be buggy and corrupted. In that case, delete scamguard-venv folder and create a new virtual python environment:
+`python -m venv scamguard-venv`
 
 4. Install the required Python packages:
 `pip install -r requirements.txt`
