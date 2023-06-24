@@ -21,8 +21,9 @@ The chatbot provides a user-friendly interface for interacting with the fraud de
 
 ### Prerequisites
 
-- Node.js
-- Python
+- Node.js (for frontend)
+- Python (for backend)
+- FFmpeg (for audio processing)
 
 ### Frontend Setup
 
@@ -40,11 +41,14 @@ The chatbot provides a user-friendly interface for interacting with the fraud de
 1. Navigate to the root folder of the app:
 `cd backend/scamguard`
 
-2. Activate the virtual environment (recommended):
+2. Create a virtual python environment (recommended):
+`python -m venv scamguard-venv`
+
+3. Activate the virtual environment (recommended):
 `scamguard-venv/Scripts/activate`
 
-3. Install the required Python packages:
+4. Install the required Python packages:
 `pip install -r requirements.txt`
 
-4. Run api.py:
+5. Run api.py:
 `python src/api.py`
