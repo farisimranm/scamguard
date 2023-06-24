@@ -2,16 +2,36 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import speech_recognition as sr
 from pydub import AudioSegment
-from os.path import splitext
 import tempfile
+import requests
 
 app = Flask(__name__)
 CORS(app, origins=['http://localhost:3000'])
 
+def speechFraudDetection(text):
+    url = 'http://localhost:8081/speech-fraud-detection'
+
+    request_body = {
+        'chatMessages': [
+            {
+                'role': 'user',
+                'content': f'''
+                I have converted a suspicious phone call I received into text.
+                There might be some mistakes or missing words, but can you help me analyze if the caller is trying to scam me?
+                This is the call transciption:
+                {text}
+                ''', 
+            }
+        ]
+    }
+
+    response = requests.post(url, json=request_body)
+    return response
+
 @app.route('/api/speech-to-text', methods=['POST'])
 def speech_to_text():
     if 'file' not in request.files:
-        return 'No file found in the request.'
+        return jsonify({'error': 'No file found in the request.'}), 400
     
     file = request.files['file']
     filename = file.filename
@@ -32,7 +52,8 @@ def speech_to_text():
         
         print(f'Running speech recognition...')
         text = recognizer.recognize_google(audio_data)
-        return jsonify({'text': text}), 200
+        response = speechFraudDetection(text)
+        return response
 
     except sr.UnknownValueError:
         return jsonify({'error': 'Speech recognition could not understand the audio.'}), 500
@@ -41,7 +62,7 @@ def speech_to_text():
         return jsonify({'error': 'Error occurred while processing the audio.'}), 500
     
     except Exception as e:
-        return jsonify({'error': 'Error occurred during audio file processing: ' + str(e)}), 500
+        return jsonify({'error': 'Error occurred while processing the audio: ' + str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
