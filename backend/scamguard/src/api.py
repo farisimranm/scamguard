@@ -15,7 +15,7 @@ def speechFraudDetection(text):
         'chatMessages': [
             {
                 'role': 'user',
-                'content': f'I have converted a suspicious phone call I received into text. There might be some mistakes or missing words, but can you help me analyze if the caller is trying to scam me? This is the call transciption: {text}'
+                'content': f'{text}'
             }
         ]
     }
