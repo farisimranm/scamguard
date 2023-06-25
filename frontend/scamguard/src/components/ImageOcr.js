@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { createWorker } from 'tesseract.js';
-// import { automateChat } from '../services/automateChat';
 
 function ImageOcr() {
   const [ selectedImage, setSelectedImage ] = useState(null);

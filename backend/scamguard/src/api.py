@@ -9,26 +9,22 @@ app = Flask(__name__)
 CORS(app, origins=['http://localhost:3000'])
 
 def speechFraudDetection(text):
-    url = 'http://localhost:8081/speech-fraud-detection'
+    url = 'http://localhost:8081/api/v1/speech-fraud-detection'
 
     request_body = {
         'chatMessages': [
             {
                 'role': 'user',
-                'content': f'''
-                I have converted a suspicious phone call I received into text.
-                There might be some mistakes or missing words, but can you help me analyze if the caller is trying to scam me?
-                This is the call transciption:
-                {text}
-                ''', 
+                'content': f'I have converted a suspicious phone call I received into text. There might be some mistakes or missing words, but can you help me analyze if the caller is trying to scam me? This is the call transciption: {text}'
             }
         ]
     }
 
-    response = requests.post(url, json=request_body)
+    print(f'Sending results to Java Spring Boot API...')
+    response = requests.post(url, json=request_body).json()
     return response
 
-@app.route('/api/speech-to-text', methods=['POST'])
+@app.route('/api/v1/speech-fraud-detection', methods=['POST'])
 def speech_to_text():
     if 'file' not in request.files:
         return jsonify({'error': 'No file found in the request.'}), 400
@@ -53,7 +49,7 @@ def speech_to_text():
         print(f'Running speech recognition...')
         text = recognizer.recognize_google(audio_data)
         response = speechFraudDetection(text)
-        return response
+        return jsonify(response), 200
 
     except sr.UnknownValueError:
         return jsonify({'error': 'Speech recognition could not understand the audio.'}), 500

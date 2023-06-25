@@ -10,7 +10,7 @@ function AudioStt() {
         const formData = new FormData();
         formData.append('file', audioFile);
 
-        axios.post('http://localhost:5000/api/speech-to-text', formData)
+        axios.post('http://localhost:5000/api/speech-fraud-detection', formData)
         .then((response) => {
             console.log(response.data);
             setSttData(response.data);
