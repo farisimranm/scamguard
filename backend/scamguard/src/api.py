@@ -8,6 +8,7 @@ import requests
 app = Flask(__name__)
 CORS(app, origins=['http://localhost:3000'])
 
+
 def speechFraudDetection(text):
     url = 'http://localhost:8081/api/v1/speech-fraud-detection'
 
@@ -24,15 +25,16 @@ def speechFraudDetection(text):
     response = requests.post(url, json=request_body).json()
     return response
 
+
 @app.route('/api/v1/speech-fraud-detection', methods=['POST'])
 def speech_to_text():
     if 'file' not in request.files:
         return jsonify({'error': 'No file found in the request.'}), 400
-    
+
     file = request.files['file']
     filename = file.filename
     print(f'Received {filename}')
-    
+
     try:
         # convert audio file to flac to feed into SpeechRecognition
         print(f'Processing {filename}...')
@@ -40,25 +42,26 @@ def speech_to_text():
         temp_file = tempfile.NamedTemporaryFile(suffix=".flac", delete=False)
         audio.export(temp_file.name, format="flac")
         temp_file_path = temp_file.name
-        
+
         # Perform speech-to-text processing using the SpeechRecognition library
         recognizer = sr.Recognizer()
         with sr.AudioFile(temp_file_path) as source:
             audio_data = recognizer.record(source)
-        
+
         print(f'Running speech recognition...')
         text = recognizer.recognize_google(audio_data)
         response = speechFraudDetection(text)
-        return jsonify(response), 200
+        return jsonify([response, text]), 200
 
     except sr.UnknownValueError:
         return jsonify({'error': 'Speech recognition could not understand the audio.'}), 500
 
     except sr.RequestError:
         return jsonify({'error': 'Error occurred while processing the audio.'}), 500
-    
+
     except Exception as e:
         return jsonify({'error': 'Error occurred while processing the audio: ' + str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True)
